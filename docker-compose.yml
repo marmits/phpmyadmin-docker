@@ -1,13 +1,14 @@
 services:
   db:
     image: mariadb:10.11
-    container_name: pma_mariadb
+    container_name: pma_marmits_mariadb
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 123456
 
   phpmyadmin:
     image: phpmyadmin
+    container_name: pma_marmits_phpmyadmin
     restart: always
     ports:
       - 9080:80
