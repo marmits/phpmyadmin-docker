@@ -5,12 +5,30 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 123456
+    networks:
+      pma_marmits:
+        ipv4_address: 192.168.7.3
 
   phpmyadmin:
     image: phpmyadmin
     container_name: pma_marmits_phpmyadmin
-    restart: always
+    restart: always    
     ports:
       - 9080:80
+    volumes:
+      - ./config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
     environment:
       - PMA_ARBITRARY=1
+      - PMA_HOST=db
+    networks:
+      pma_marmits:
+        ipv4_address: 192.168.7.2
+
+networks:
+  pma_marmits:
+    name: pma_marmits
+    driver: bridge
+    ipam:
+      config:
+        - subnet: ${SUBNET:-192.168.7.0/24}
+          gateway: 192.168.7.1
