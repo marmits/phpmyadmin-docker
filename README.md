@@ -47,5 +47,5 @@ $cfg['Servers'][$i]['AllowNoPassword'] = false;
 
 
 ### Firewall
-# la règle INPUT pour accepter le trafic sur l'interface de l'hôte.
-sudo ufw allow from 192.168.7.0/24 to any port 3306
+La règle INPUT pour accepter le trafic sur l'interface de l'hôte.  
+`sudo ufw allow from 192.168.7.0/24 to any port 3306`
