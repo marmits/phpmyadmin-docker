@@ -11,11 +11,12 @@ services:
 
 
   ssh-tunnel:
+    image: marmits/ssh-tunnel:1.0
     build: 
       context: .
       dockerfile: Dockerfile
       target: tunnel_ssh
-    container_name: mariadb-ssh-tunnel
+    container_name: mariadb-marmits-ssh-tunnel
     restart: unless-stopped
     environment:
       SSH_USER: ${SSH_USER}
