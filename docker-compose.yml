@@ -7,7 +7,28 @@ services:
       MYSQL_ROOT_PASSWORD: 123456
     networks:
       pma_marmits:
-        ipv4_address: 192.168.7.3
+        ipv4_address: ${IPV4_DB:-192.168.7.3}
+
+
+  ssh-tunnel:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      target: tunnel_ssh
+    container_name: mariadb-ssh-tunnel
+    restart: unless-stopped
+    environment:
+      SSH_USER: ${SSH_USER}
+      SSH_HOST: ${SSH_HOST}
+      SSH_PORT: ${SSH_PORT}
+      LOCAL_PORT: ${LOCAL_PORT}
+      REMOTE_HOST: ${REMOTE_HOST}
+      REMOTE_PORT: ${REMOTE_PORT}
+    volumes:
+      - ${SSH_KEY_PATH}:/root/.ssh/id_ed25519:ro
+    networks:
+      pma_marmits:
+        ipv4_address: ${IPV4_SSH_TUNNEL:-192.168.7.4}
 
   phpmyadmin:
     image: phpmyadmin
@@ -20,9 +41,10 @@ services:
     environment:
       - PMA_ARBITRARY=1
       - PMA_HOST=db
+      - LOCAL_PORT=${LOCAL_PORT}
     networks:
       pma_marmits:
-        ipv4_address: 192.168.7.2
+        ipv4_address: ${IPV4_PM:-192.168.7.2}
 
 networks:
   pma_marmits:
@@ -30,5 +52,5 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: ${SUBNET:-192.168.7.0/24}
-          gateway: 192.168.7.1
+        - subnet: ${IPV4_SUBNET:-192.168.7.0/24}
+          gateway: ${IPV4_GATEWAY:-}
